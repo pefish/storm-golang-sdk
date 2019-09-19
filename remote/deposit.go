@@ -35,3 +35,18 @@ func (this *Remote) ListDepositTransaction(param ListDepositTransactionParam) ([
 	go_format.Format.SliceToStruct(data.([]interface{}), &results)
 	return results, nil
 }
+
+type GetDepositTransactionParam struct {
+	Uuid string `json:"uuid"`
+}
+
+func (this *Remote) GetDepositTransaction(param GetDepositTransactionParam) (*ListDepositTransactionReturn, *go_error.ErrorInfo) {
+	path := `/api/storm-wallet/v1/deposit/transaction`
+	data, err := this.getJson(path, param)
+	if err != nil {
+		return nil, err
+	}
+	result := ListDepositTransactionReturn{}
+	go_format.Format.MapToStruct(data.(map[string]interface{}), &result)
+	return &result, nil
+}

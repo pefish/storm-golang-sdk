@@ -16,7 +16,6 @@ func TestRemote_Withdraw(t *testing.T) {
 	fmt.Printf(`%#v`, result)
 }
 
-
 func TestRemote_ListWithdrawTransaction(t *testing.T) {
 	results, err := remote.ListWithdrawTransaction(ListWithdrawTransactionParam{
 		TxId: `67e885c11f0dacf982dd2d1e10a7a62c37e454d9ead827eab7a96124fc628629`,
@@ -27,4 +26,14 @@ func TestRemote_ListWithdrawTransaction(t *testing.T) {
 	if results[0].UserId <= 0 {
 		t.Error()
 	}
+}
+
+func TestRemote_GetWithdrawTransaction(t *testing.T) {
+	result, err := remote.GetWithdrawTransaction(GetWithdrawTransactionParam{
+		Uuid: `hsjghjsfghafjagfha11`,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf(`%#v`, result)
 }
