@@ -1,14 +1,10 @@
 package remote
 
 import (
-	"fmt"
-	"github.com/pefish/go-crypto"
 	"github.com/pefish/go-error"
 	"github.com/pefish/go-format"
 	"github.com/pefish/go-http"
-	"github.com/pefish/go-reflect"
-	"sort"
-	"strings"
+	signature2 "github.com/pefish/storm-golang-sdk/signature"
 	"time"
 )
 
@@ -34,27 +30,13 @@ type Remote struct {
 	ApiSecret string
 }
 
-func (this *Remote) sign(method string, apiPath string, params map[string]interface{}) (string, string) {
-	sortedStr := ``
-	var keys []string
-	fmt.Println(params)
-	for k, _ := range params {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	for _, k := range keys {
-		sortedStr += k + `=` + go_reflect.Reflect.ToString(params[k]) + `&`
-	}
-	sortedStr = strings.TrimSuffix(sortedStr, `&`)
-	timestamp := go_reflect.Reflect.ToString(time.Now().UnixNano() / 1e6)
-	toSignStr := method + `|` + apiPath + `|` + timestamp + `|` + sortedStr
-	return go_crypto.Crypto.HmacSha256ToHex(toSignStr, this.ApiSecret), timestamp
-}
-
 func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	sig, timestamp := this.sign(`POST`, path, go_format.Format.StructToMap(params))
+	signature := signature2.Signature{
+		ApiKey:    this.ApiKey,
+		ApiSecret: this.ApiSecret,
+	}
+	sig, timestamp := signature.Sign(`POST`, path, go_format.Format.StructToMap(params))
 	go_http.Http.PostJsonForStruct(go_http.RequestParam{
 		Url: this.BaseUrl + path,
 		Headers: map[string]interface{}{
@@ -76,7 +58,11 @@ func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_
 
 func (this *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	sig, timestamp := this.sign(`GET`, path, go_format.Format.StructToMap(params))
+	signature := signature2.Signature{
+		ApiKey:    this.ApiKey,
+		ApiSecret: this.ApiSecret,
+	}
+	sig, timestamp := signature.Sign(`GET`, path, go_format.Format.StructToMap(params))
 	go_http.Http.GetForStruct(go_http.RequestParam{
 		Url: this.BaseUrl + path,
 		Headers: map[string]interface{}{
