@@ -32,7 +32,7 @@ type Remote struct {
 
 func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	signature := signature2.Signature{
+	signature := signature2.SignatureClass{
 		ApiKey:    this.ApiKey,
 		ApiSecret: this.ApiSecret,
 	}
@@ -58,7 +58,7 @@ func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_
 
 func (this *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	signature := signature2.Signature{
+	signature := signature2.SignatureClass{
 		ApiKey:    this.ApiKey,
 		ApiSecret: this.ApiSecret,
 	}

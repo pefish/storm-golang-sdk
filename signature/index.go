@@ -8,16 +8,26 @@ import (
 	"time"
 )
 
-func NewDefaultSignatureHelper() *Signature {
-	return &Signature{}
+func NewDefaultSignatureHelper() *SignatureClass {
+	return &SignatureClass{}
 }
 
-type Signature struct {
+type SignatureClass struct {
 	ApiKey    string
 	ApiSecret string
 }
 
-func (this *Signature) VerifySignature(secret string, timestamp string, method string, apiPath string, params map[string]interface{}) string {
+var Signature = SignatureClass{}
+
+func (this *SignatureClass) SetApiKey(apiKey string) {
+	this.ApiKey = apiKey
+}
+
+func (this *SignatureClass) SetApiSecret(apiSecret string) {
+	this.ApiSecret = apiSecret
+}
+
+func (this *SignatureClass) VerifySignature(secret string, timestamp string, method string, apiPath string, params map[string]interface{}) string {
 	sortedStr := ``
 	var keys []string
 	for k, v := range params {
@@ -34,7 +44,7 @@ func (this *Signature) VerifySignature(secret string, timestamp string, method s
 	return go_crypto.Crypto.HmacSha256ToHex(toSignStr, secret)
 }
 
-func (this *Signature) Sign(method string, apiPath string, params map[string]interface{}) (string, string) {
+func (this *SignatureClass) Sign(method string, apiPath string, params map[string]interface{}) (string, string) {
 	sortedStr := ``
 	var keys []string
 	for k, _ := range params {
