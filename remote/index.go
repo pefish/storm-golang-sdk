@@ -8,14 +8,31 @@ import (
 	"time"
 )
 
-func NewDefaultRemoteHelper() *Remote {
-	return &Remote{
-		BaseUrl: `https://storm.zg.com`,
+type RemoteOptionFunc func(options *RemoteOption)
+
+type RemoteOption struct {
+	timeout time.Duration
+}
+
+var defaultHttpRequestOption = RemoteOption{
+	timeout: 10 * time.Second,
+}
+
+func WithTimeout(timeout time.Duration) RemoteOptionFunc {
+	return func(option *RemoteOption) {
+		option.timeout = timeout
 	}
 }
 
-func (this *Remote) SetTimeout(timeout time.Duration) {
-	go_http.Http.SetTimeout(timeout)
+func NewDefaultRemoteHelper(opts ...RemoteOptionFunc) *Remote {
+	option := defaultHttpRequestOption
+	for _, o := range opts {
+		o(&option)
+	}
+	go_http.Http = go_http.NewHttpRequester(go_http.WithTimeout(option.timeout))
+	return &Remote{
+		BaseUrl: `https://storm.zg.com`,
+	}
 }
 
 type ApiResult struct {

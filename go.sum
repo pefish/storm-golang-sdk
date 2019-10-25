@@ -40,8 +40,10 @@ github.com/pefish/go-application v0.1.0 h1:xzr+g74pqrwMe1TFTOnBLgSD3nWgFWe7ACGqw
 github.com/pefish/go-application v0.1.0/go.mod h1:bIM667i1fBpkJxZWE0lTbYs/FW4O9YgnW5gj4sy33ko=
 github.com/pefish/go-crypto v0.1.0 h1:KdWWPan7jwIkuyo3FaFcEeeBz4ELt39kmrY+zaKiTUI=
 github.com/pefish/go-crypto v0.1.0/go.mod h1:ndNwXsm8i3+v2Z8m6BqXMFM8CXR+9SOf2rbCHC3U9/s=
+github.com/pefish/go-crypto v0.2.0/go.mod h1:mqSAP9pi/W9wmhkHImKPpJYlsXXTx9TTqIAlUYVGtTA=
 github.com/pefish/go-decimal v0.1.3 h1:l/H5bMOroqAop9LNva0TjuOf89WwaWrJ98CtKyXCsU4=
 github.com/pefish/go-decimal v0.1.3/go.mod h1:/jabPJOWlQJCvHGm513io0uO/ZRCXpK6vjpdNkkFKCA=
+github.com/pefish/go-decimal v0.2.0/go.mod h1:cA32n7NTQBt7TGv8iE7uHFH/1xhu8RWDaoyYlJHf5CM=
 github.com/pefish/go-error v0.2.2 h1:5TBNKm11Lz4S/LIUQDKh2GpCZxhUjtZVdDp7xF0pl10=
 github.com/pefish/go-error v0.2.2/go.mod h1:J+uA2hCnHSIbZgezmjvmWBizZTnmFhL5hOIXUqfx+BA=
 github.com/pefish/go-format v0.1.1 h1:ERqLlOXdUrppAtA72p6lz0owlmYEAfVVpJohcgvF6gY=
@@ -50,6 +52,7 @@ github.com/pefish/go-format v0.1.3 h1:SJLHQT/N+mSYjO1ir/VjIruODe+PqxCwaqanMNlxAO
 github.com/pefish/go-format v0.1.3/go.mod h1:IENENkJAeyzmjOeazCSYuFO4RkC4mzA3t0iENc9b344=
 github.com/pefish/go-http v0.2.6 h1:X4L+MxnRxqIIGF9fwOytFNkZYSHfieo20jn4aVYKBIo=
 github.com/pefish/go-http v0.2.6/go.mod h1:ZefigzBHARZj1ytd4K4ildpmL3dWJPNAIxl6hNXfRiI=
+github.com/pefish/go-http v0.4.0/go.mod h1:o7Iws49Oth6wyMM8c0zpQj4yugJJQrK5ZJiJfkUUbGU=
 github.com/pefish/go-json v0.1.1 h1:TjrjuVcST8K+j83OeIdJPKalQjIyRJHNda6L9Am2Rik=
 github.com/pefish/go-json v0.1.1/go.mod h1:7plXZcvUPrBT5EdIwXNM9F00TL9ixOG4OJHkAF8TcL8=
 github.com/pefish/go-reflect v0.0.3 h1:VybCShzI0EbvlcqaebdlqEC/F5fP8beRuNpr/Ia+cr8=
@@ -57,6 +60,7 @@ github.com/pefish/go-reflect v0.0.3/go.mod h1:lv3gz/Zh2FsqCq8jqzdCgYpoM41AjE90Ht
 github.com/pefish/go-reflect v0.0.4/go.mod h1:lv3gz/Zh2FsqCq8jqzdCgYpoM41AjE90HtknRbkXhjQ=
 github.com/pefish/go-reflect v0.0.7 h1:Svy8xuxJW3WQmDPD1KV+pHg77LsgpSpx0fwHa+GGHw8=
 github.com/pefish/go-reflect v0.0.7/go.mod h1:lv3gz/Zh2FsqCq8jqzdCgYpoM41AjE90HtknRbkXhjQ=
+github.com/pefish/go-reflect v0.1.1/go.mod h1:lv3gz/Zh2FsqCq8jqzdCgYpoM41AjE90HtknRbkXhjQ=
 github.com/pefish/go-string v0.1.0 h1:44fqR5C5nx2c+mQC9k/k+bRMUuU829T8PswFrcDKc/M=
 github.com/pefish/go-string v0.1.0/go.mod h1:pCtpTZOvsAsTZNGByIevlSW85+Qv8DjTXljwDpEGYvs=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
