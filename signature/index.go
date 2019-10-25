@@ -37,7 +37,7 @@ func (this *SignatureClass) VerifySignature(timestamp string, method string, api
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		sortedStr += k + `=` + go_reflect.Reflect.ToString(params[k]) + `&`
+		sortedStr += k + `=` + go_reflect.Reflect.MustToString(params[k]) + `&`
 	}
 	sortedStr = strings.TrimSuffix(sortedStr, `&`)
 	toSignStr := method + `|` + apiPath + `|` + timestamp + `|` + sortedStr
@@ -53,10 +53,10 @@ func (this *SignatureClass) Sign(method string, apiPath string, params map[strin
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		sortedStr += k + `=` + go_reflect.Reflect.ToString(params[k]) + `&`
+		sortedStr += k + `=` + go_reflect.Reflect.MustToString(params[k]) + `&`
 	}
 	sortedStr = strings.TrimSuffix(sortedStr, `&`)
-	timestamp := go_reflect.Reflect.ToString(time.Now().UnixNano() / 1e6)
+	timestamp := go_reflect.Reflect.MustToString(time.Now().UnixNano() / 1e6)
 	toSignStr := method + `|` + apiPath + `|` + timestamp + `|` + sortedStr
 	return go_crypto.Crypto.HmacSha256ToHex(toSignStr, this.ApiSecret), timestamp
 }
