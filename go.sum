@@ -44,6 +44,8 @@ github.com/pefish/go-decimal v0.2.0 h1:oRe3Q29YdhS7vswFNcprsMYSmwAiwYqyNjUuEw8OM
 github.com/pefish/go-decimal v0.2.0/go.mod h1:cA32n7NTQBt7TGv8iE7uHFH/1xhu8RWDaoyYlJHf5CM=
 github.com/pefish/go-error v0.2.2 h1:5TBNKm11Lz4S/LIUQDKh2GpCZxhUjtZVdDp7xF0pl10=
 github.com/pefish/go-error v0.2.2/go.mod h1:J+uA2hCnHSIbZgezmjvmWBizZTnmFhL5hOIXUqfx+BA=
+github.com/pefish/go-error v0.3.4 h1:ZXO3jkHwWRljXmR+EiDPr2sWPBO3EQ1/X0qwb2I3ilY=
+github.com/pefish/go-error v0.3.4/go.mod h1:J+uA2hCnHSIbZgezmjvmWBizZTnmFhL5hOIXUqfx+BA=
 github.com/pefish/go-format v0.1.1 h1:ERqLlOXdUrppAtA72p6lz0owlmYEAfVVpJohcgvF6gY=
 github.com/pefish/go-format v0.1.1/go.mod h1:IENENkJAeyzmjOeazCSYuFO4RkC4mzA3t0iENc9b344=
 github.com/pefish/go-format v0.1.3 h1:SJLHQT/N+mSYjO1ir/VjIruODe+PqxCwaqanMNlxAOA=

@@ -1,7 +1,3 @@
 package remote
 
-var remote = Remote{
-	BaseUrl:   `http://localhost:8000`,
-	ApiKey:    `12345gsg`,
-	ApiSecret: `tw2456245twe2`,
-}
+var remote = NewRemote(`http://localhost:8000`, WithKey(`12345gsg`, `tw2456245twe2`))

@@ -27,7 +27,7 @@ func (this *SignatureClass) SetApiSecret(apiSecret string) {
 	this.ApiSecret = apiSecret
 }
 
-func (this *SignatureClass) VerifySignature(timestamp string, method string, apiPath string, params map[string]interface{}) string {
+func (this *SignatureClass) VerifyRequestSignature(signature string, timestamp string, method string, apiPath string, params map[string]interface{}) bool {
 	sortedStr := ``
 	var keys []string
 	for k, v := range params {
@@ -41,7 +41,12 @@ func (this *SignatureClass) VerifySignature(timestamp string, method string, api
 	}
 	sortedStr = strings.TrimSuffix(sortedStr, `&`)
 	toSignStr := method + `|` + apiPath + `|` + timestamp + `|` + sortedStr
-	return go_crypto.Crypto.HmacSha256ToHex(toSignStr, this.ApiSecret)
+	return signature == go_crypto.Crypto.HmacSha256ToHex(toSignStr, this.ApiSecret)
+}
+
+func (this *SignatureClass) VerifyResponseSignature(signature string, timestamp string, body string) bool {
+	realSignature := go_crypto.Crypto.HmacSha256ToHex(body + `|` + timestamp + `|` + this.ApiKey, this.ApiSecret)
+	return realSignature == signature
 }
 
 func (this *SignatureClass) Sign(method string, apiPath string, params map[string]interface{}) (string, string) {
