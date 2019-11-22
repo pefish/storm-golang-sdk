@@ -15,7 +15,7 @@ type WithdrawParam struct {
 }
 
 func (this *Remote) Withdraw(param WithdrawParam) *go_error.ErrorInfo {
-	path := `/api/storm-wallet/v1/withdraw`
+	path := `/api/storm/v1/withdraw`
 	_, err := this.postJson(path, param)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ type ListWithdrawTransactionReturn struct {
 }
 
 func (this *Remote) ListWithdrawTransaction(param ListWithdrawTransactionParam) ([]ListWithdrawTransactionReturn, *go_error.ErrorInfo) {
-	path := `/api/storm-wallet/v1/withdraw/transactions`
+	path := `/api/storm/v1/withdraw/transactions`
 	data, err := this.getJson(path, param)
 	if err != nil {
 		return nil, err

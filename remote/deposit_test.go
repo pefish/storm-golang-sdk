@@ -1,7 +1,6 @@
 package remote
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -15,14 +14,4 @@ func TestRemote_ListDepositTransaction(t *testing.T) {
 	if results[0].UserId <= 0 {
 		t.Error()
 	}
-}
-
-func TestRemote_GetDepositTransaction(t *testing.T) {
-	result, err := remote.GetDepositTransaction(GetDepositTransactionParam{
-		Uuid: `hsjghjsfghafjagfha1`,
-	})
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf(`%#v`, result)
 }

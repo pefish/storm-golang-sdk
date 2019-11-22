@@ -26,7 +26,7 @@ type ListDepositTransactionReturn struct {
 }
 
 func (this *Remote) ListDepositTransaction(param ListDepositTransactionParam) ([]ListDepositTransactionReturn, *go_error.ErrorInfo) {
-	path := `/api/storm-wallet/v1/deposit/transactions`
+	path := `/api/storm/v1/deposit/transactions`
 	data, err := this.getJson(path, param)
 	if err != nil {
 		return nil, err

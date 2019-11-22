@@ -27,13 +27,3 @@ func TestRemote_ListWithdrawTransaction(t *testing.T) {
 		t.Error()
 	}
 }
-
-func TestRemote_GetWithdrawTransaction(t *testing.T) {
-	result, err := remote.GetWithdrawTransaction(GetWithdrawTransactionParam{
-		Uuid: `hsjghjsfghafjagfha11`,
-	})
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf(`%#v`, result)
-}

@@ -2,6 +2,7 @@ module github.com/pefish/storm-golang-sdk
 
 require (
 	github.com/btcsuite/btcd v0.0.0-20190213025234-306aecffea32
+	github.com/pefish/go-application v0.1.0
 	github.com/pefish/go-crypto v0.2.0
 	github.com/pefish/go-decimal v0.2.0
 	github.com/pefish/go-error v0.3.4
