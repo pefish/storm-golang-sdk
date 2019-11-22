@@ -57,18 +57,3 @@ func (this *Remote) ListWithdrawTransaction(param ListWithdrawTransactionParam) 
 	go_format.Format.SliceToStruct(data.([]interface{}), &results)
 	return results, nil
 }
-
-type GetWithdrawTransactionParam struct {
-	Uuid string `json:"uuid"`
-}
-
-func (this *Remote) GetWithdrawTransaction(param GetWithdrawTransactionParam) (*ListWithdrawTransactionReturn, *go_error.ErrorInfo) {
-	path := `/api/storm-wallet/v1/withdraw/transaction`
-	data, err := this.getJson(path, param)
-	if err != nil {
-		return nil, err
-	}
-	result := ListWithdrawTransactionReturn{}
-	go_format.Format.MapToStruct(data.(map[string]interface{}), &result)
-	return &result, nil
-}
