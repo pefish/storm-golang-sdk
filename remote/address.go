@@ -12,6 +12,7 @@ type GetNewDepositAddressParam struct {
 }
 type GetNewDepositAddressResult struct {
 	Address string `json:"address"`
+	Tag     string `json:"tag"`
 }
 
 func (this *Remote) GetNewDepositAddress(param GetNewDepositAddressParam) (*GetNewDepositAddressResult, *go_error.ErrorInfo) {
@@ -29,6 +30,7 @@ type ValidateAddressParam struct {
 	Currency string `json:"currency"`
 	Chain    string `json:"chain"`
 	Address  string `json:"address"`
+	Tag      string `json:"tag"`
 }
 
 func (this *Remote) ValidateAddress(param ValidateAddressParam) (bool, *go_error.ErrorInfo) {
@@ -44,6 +46,7 @@ type IsPlatformParam struct {
 	Currency string `json:"currency"`
 	Chain    string `json:"chain"`
 	Address  string `json:"address"`
+	Tag      string `json:"tag"`
 }
 
 func (this *Remote) IsPlatformAddress(param IsPlatformParam) (bool, *go_error.ErrorInfo) {
