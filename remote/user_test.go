@@ -17,6 +17,17 @@ func TestRemote_ListBalance(t *testing.T) {
 	}
 }
 
+func TestRemote_GetCoinBalance(t *testing.T) {
+	result, err := remote.GetCoinBalance(GetUserCurrencyParam{
+		Chain:    `Eth`,
+		Currency: `ETH`,
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf(`%s`, result.Avail)
+}
+
 func TestRemote_ListUserCurrencies(t *testing.T) {
 	results, err := remote.ListUserCurrencies()
 	if err != nil {
@@ -28,7 +39,7 @@ func TestRemote_ListUserCurrencies(t *testing.T) {
 func TestRemote_GetUserCurrency(t *testing.T) {
 	result, err := remote.GetUserCurrency(GetUserCurrencyParam{
 		Currency: `ETH`,
-		Chain: `Eth`,
+		Chain:    `Eth`,
 	})
 	if err != nil {
 		panic(err)

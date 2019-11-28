@@ -23,6 +23,17 @@ func (this *Remote) ListBalance() ([]ListBalanceReturn, *go_error.ErrorInfo) {
 	return results, nil
 }
 
+func (this *Remote) GetCoinBalance(param GetUserCurrencyParam) (*ListBalanceReturn, *go_error.ErrorInfo) {
+	path := `/api/storm/v1/coin-balance`
+	data, err := this.getJson(path, param)
+	if err != nil {
+		return nil, err
+	}
+	result := ListBalanceReturn{}
+	go_format.Format.MapToStruct(data.(map[string]interface{}), &result)
+	return &result, nil
+}
+
 type ListUserCurrencyReturn struct {
 	WithdrawLimitDaily            float64 `json:"withdraw_limit_daily"`
 	MaxWithdrawAmount             float64 `json:"max_withdraw_amount"`
