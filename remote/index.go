@@ -84,7 +84,15 @@ func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_
 			ErrorMessage: `response signature verify error`,
 		}
 	}
-	go_format.Format.MapToStruct(go_json.Json.Parse(body).(map[string]interface{}), &result)
+	bodyJson, err := go_json.Json.Parse(body)
+	if err != nil {
+		return nil, &go_error.ErrorInfo{
+			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
+			ErrorMessage: `parse body error`,
+			Err: err,
+		}
+	}
+	go_format.Format.MapToStruct(bodyJson.(map[string]interface{}), &result)
 	if result.Code != 0 {
 		return nil, &go_error.ErrorInfo{
 			ErrorCode:            result.Code,
@@ -115,7 +123,15 @@ func (this *Remote) getJson(path string, params interface{}) (interface{}, *go_e
 			ErrorMessage: `response signature verify error`,
 		}
 	}
-	go_format.Format.MapToStruct(go_json.Json.Parse(body).(map[string]interface{}), &result)
+	bodyJson, err := go_json.Json.Parse(body)
+	if err != nil {
+		return nil, &go_error.ErrorInfo{
+			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
+			ErrorMessage: `parse body error`,
+			Err: err,
+		}
+	}
+	go_format.Format.MapToStruct(bodyJson.(map[string]interface{}), &result)
 	if result.Code != 0 {
 		return nil, &go_error.ErrorInfo{
 			ErrorCode:            result.Code,
