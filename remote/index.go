@@ -16,7 +16,7 @@ type RemoteOptionFunc func(options *RemoteOption)
 type Remote struct {
 	baseUrl          string
 	signatureManager *signature2.SignatureClass
-	httpRequester    *go_http.HttpClass
+	timeout    time.Duration
 }
 
 type RemoteOption struct {
@@ -54,7 +54,7 @@ func NewRemote(baseUrl string, opts ...RemoteOptionFunc) *Remote {
 			ReqPrivKey: option.reqPrivKey,
 			ResPubKey:  option.resPubKey,
 		},
-		httpRequester: go_http.NewHttpRequester(go_http.WithTimeout(option.timeout)),
+		timeout: option.timeout,
 	}
 }
 
@@ -68,7 +68,7 @@ type ApiResult struct {
 func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := this.signatureManager.SignRequest(`POST`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester().Post(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(this.timeout)).Post(go_http.RequestParam{
 		Url: this.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       this.signatureManager.ReqPubKey,
@@ -114,7 +114,7 @@ func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_
 func (this *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := this.signatureManager.SignRequest(`GET`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester().Get(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(this.timeout)).Get(go_http.RequestParam{
 		Url: this.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       this.signatureManager.ReqPubKey,
