@@ -12,9 +12,9 @@ type ListBalanceReturn struct {
 	Freeze   string `json:"freeze"`
 }
 
-func (this *Remote) ListBalance() ([]ListBalanceReturn, *go_error.ErrorInfo) {
+func (r *Remote) ListBalance() ([]ListBalanceReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/balance`
-	data, err := this.getJson(path, nil)
+	data, err := r.getJson(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -23,9 +23,9 @@ func (this *Remote) ListBalance() ([]ListBalanceReturn, *go_error.ErrorInfo) {
 	return results, nil
 }
 
-func (this *Remote) GetCoinBalance(param GetUserCurrencyParam) (*ListBalanceReturn, *go_error.ErrorInfo) {
+func (r *Remote) GetCoinBalance(param GetUserCurrencyParam) (*ListBalanceReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/coin-balance`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return nil, err
 	}
@@ -52,9 +52,9 @@ type ListUserCurrencyReturn struct {
 	IsDepositEnable               uint64  `json:"is_deposit_enable"`
 }
 
-func (this *Remote) ListUserCurrencies() ([]ListUserCurrencyReturn, *go_error.ErrorInfo) {
+func (r *Remote) ListUserCurrencies() ([]ListUserCurrencyReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/user-currencies`
-	data, err := this.getJson(path, nil)
+	data, err := r.getJson(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,9 +68,9 @@ type GetUserCurrencyParam struct {
 	Chain    string `json:"chain" validate:"required"`
 }
 
-func (this *Remote) GetUserCurrency(param GetUserCurrencyParam) (*ListUserCurrencyReturn, *go_error.ErrorInfo) {
+func (r *Remote) GetUserCurrency(param GetUserCurrencyParam) (*ListUserCurrencyReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/user-currency`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return nil, err
 	}

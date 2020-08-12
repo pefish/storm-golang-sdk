@@ -1,6 +1,7 @@
 package remote
 
 import (
+	"errors"
 	"github.com/pefish/go-error"
 	"github.com/pefish/go-format"
 	"github.com/pefish/go-http"
@@ -16,7 +17,8 @@ type RemoteOptionFunc func(options *RemoteOption)
 type Remote struct {
 	baseUrl          string
 	signatureManager *signature2.SignatureClass
-	timeout    time.Duration
+	timeout          time.Duration
+	isDebug          bool
 }
 
 type RemoteOption struct {
@@ -24,11 +26,18 @@ type RemoteOption struct {
 	reqPubKey  string
 	reqPrivKey string
 	resPubKey  string
+	isDebug    bool
 }
 
 func WithTimeout(timeout time.Duration) RemoteOptionFunc {
 	return func(option *RemoteOption) {
 		option.timeout = timeout
+	}
+}
+
+func WithIsDebug(isDebug bool) RemoteOptionFunc {
+	return func(option *RemoteOption) {
+		option.isDebug = isDebug
 	}
 }
 
@@ -43,6 +52,7 @@ func WithKey(reqPubKey string, reqPrivKey string, resPubKey string) RemoteOption
 func NewRemote(baseUrl string, opts ...RemoteOptionFunc) *Remote {
 	option := RemoteOption{
 		timeout: 10 * time.Second,
+		isDebug: false,
 	}
 	for _, o := range opts {
 		o(&option)
@@ -55,6 +65,7 @@ func NewRemote(baseUrl string, opts ...RemoteOptionFunc) *Remote {
 			ResPubKey:  option.resPubKey,
 		},
 		timeout: option.timeout,
+		isDebug: option.isDebug,
 	}
 }
 
@@ -65,99 +76,67 @@ type ApiResult struct {
 	InternalErrorMessage string      `json:"internal_msg"`
 }
 
-func (this *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
+func (r *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	sig, timestamp := this.signatureManager.SignRequest(`POST`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(this.timeout)).Post(go_http.RequestParam{
-		Url: this.baseUrl + path,
+	sig, timestamp := r.signatureManager.SignRequest(`POST`, path, go_format.Format.StructToMap(params))
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithIsDebug(r.isDebug)).Post(go_http.RequestParam{
+		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
-			`STM-REQ-KEY`:       this.signatureManager.ReqPubKey,
+			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
 			`STM-REQ-SIGNATURE`: sig,
 			`STM-REQ-TIMESTAMP`: timestamp,
 		},
 		Params: params,
 	})
 	if err != nil {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `post error`,
-			Err: err,
-		}
+		return nil, go_error.Wrap(err)
 	}
-	isValidRequest := this.verifyReturnData(resp, body)
+	isValidRequest := r.verifyReturnData(resp, body)
 	if !isValidRequest {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `response signature verify error`,
-		}
+		return nil, go_error.Wrap(errors.New(`response signature verify error`))
 	}
 	bodyJson, err := go_json.Json.Parse(body)
 	if err != nil {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `parse body error`,
-			Err: err,
-		}
+		return nil, go_error.Wrap(err)
 	}
 	go_format.Format.MapToStruct(bodyJson.(map[string]interface{}), &result)
 	if result.Code != 0 {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:            result.Code,
-			ErrorMessage:         result.Msg,
-			InternalErrorMessage: result.InternalErrorMessage,
-			Data:                 result.Data,
-		}
+		return nil, go_error.WrapWithAll(errors.New(result.Msg), result.Code, result.Data)
 	}
 	return result.Data, nil
 }
 
-func (this *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
+func (r *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
-	sig, timestamp := this.signatureManager.SignRequest(`GET`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(this.timeout)).Get(go_http.RequestParam{
-		Url: this.baseUrl + path,
+	sig, timestamp := r.signatureManager.SignRequest(`GET`, path, go_format.Format.StructToMap(params))
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithIsDebug(r.isDebug)).Get(go_http.RequestParam{
+		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
-			`STM-REQ-KEY`:       this.signatureManager.ReqPubKey,
+			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
 			`STM-REQ-SIGNATURE`: sig,
 			`STM-REQ-TIMESTAMP`: timestamp,
 		},
 		Params: params,
 	})
 	if err != nil {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `get error`,
-			Err: err,
-		}
+		return nil, go_error.Wrap(err)
 	}
-	isValidRequest := this.verifyReturnData(resp, body)
+	isValidRequest := r.verifyReturnData(resp, body)
 	if !isValidRequest {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `response signature verify error`,
-		}
+		return nil, go_error.Wrap(errors.New(`response signature verify error`))
 	}
 	bodyJson, err := go_json.Json.Parse(body)
 	if err != nil {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:    go_error.INTERNAL_ERROR_CODE,
-			ErrorMessage: `parse body error`,
-			Err: err,
-		}
+		return nil, go_error.Wrap(err)
 	}
 	go_format.Format.MapToStruct(bodyJson.(map[string]interface{}), &result)
 	if result.Code != 0 {
-		return nil, &go_error.ErrorInfo{
-			ErrorCode:            result.Code,
-			ErrorMessage:         result.Msg,
-			InternalErrorMessage: result.InternalErrorMessage,
-			Data:                 result.Data,
-		}
+		return nil, go_error.WrapWithAll(errors.New(result.Msg), result.Code, result.Data)
 	}
 	return result.Data, nil
 }
 
-func (this *Remote) verifyReturnData(resp *http.Response, body string) bool {
+func (r *Remote) verifyReturnData(resp *http.Response, body string) bool {
 	timeStamp := resp.Header.Get(`STM-RES-TIMESTAMP`)
 	signatureStr := resp.Header.Get(`STM-RES-SIGNATURE`)
 	if timeStamp == `` || signatureStr == `` {
@@ -167,5 +146,5 @@ func (this *Remote) verifyReturnData(resp *http.Response, body string) bool {
 	if nowTimestamp-go_reflect.Reflect.MustToInt64(timeStamp) > 30*1000 {
 		return false
 	}
-	return this.signatureManager.VerifyResponseSignature(signatureStr, timeStamp, body)
+	return r.signatureManager.VerifyResponseSignature(signatureStr, timeStamp, body)
 }

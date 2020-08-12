@@ -15,9 +15,9 @@ type GetNewDepositAddressResult struct {
 	Tag     string `json:"tag"`
 }
 
-func (this *Remote) GetNewDepositAddress(param GetNewDepositAddressParam) (*GetNewDepositAddressResult, *go_error.ErrorInfo) {
+func (r *Remote) GetNewDepositAddress(param GetNewDepositAddressParam) (*GetNewDepositAddressResult, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/new-address`
-	data, err := this.postJson(path, param)
+	data, err := r.postJson(path, param)
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +33,9 @@ type ValidateAddressParam struct {
 	Tag      string `json:"tag"`
 }
 
-func (this *Remote) ValidateAddress(param ValidateAddressParam) (bool, *go_error.ErrorInfo) {
+func (r *Remote) ValidateAddress(param ValidateAddressParam) (bool, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/validate-address`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return false, err
 	}
@@ -49,9 +49,9 @@ type IsPlatformParam struct {
 	Tag      string `json:"tag"`
 }
 
-func (this *Remote) IsPlatformAddress(param IsPlatformParam) (bool, *go_error.ErrorInfo) {
+func (r *Remote) IsPlatformAddress(param IsPlatformParam) (bool, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/is-platform-address`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return false, err
 	}

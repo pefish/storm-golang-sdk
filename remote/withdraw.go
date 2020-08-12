@@ -14,9 +14,9 @@ type WithdrawParam struct {
 	Memo      *string `json:"memo,omitempty"`
 }
 
-func (this *Remote) Withdraw(param WithdrawParam) *go_error.ErrorInfo {
+func (r *Remote) Withdraw(param WithdrawParam) *go_error.ErrorInfo {
 	path := `/api/storm/v1/withdraw`
-	_, err := this.postJson(path, param)
+	_, err := r.postJson(path, param)
 	if err != nil {
 		return err
 	}
@@ -47,9 +47,9 @@ type ListWithdrawTransactionReturn struct {
 	CreatedAt     string  `db:"created_at" json:"created_at"`
 }
 
-func (this *Remote) ListWithdrawTransaction(param ListWithdrawTransactionParam) ([]ListWithdrawTransactionReturn, *go_error.ErrorInfo) {
+func (r *Remote) ListWithdrawTransaction(param ListWithdrawTransactionParam) ([]ListWithdrawTransactionReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/withdraw/transactions`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return nil, err
 	}

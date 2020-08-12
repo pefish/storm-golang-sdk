@@ -25,9 +25,9 @@ type ListDepositTransactionReturn struct {
 	CreatedAt     string  `db:"created_at" json:"created_at"`
 }
 
-func (this *Remote) ListDepositTransaction(param ListDepositTransactionParam) ([]ListDepositTransactionReturn, *go_error.ErrorInfo) {
+func (r *Remote) ListDepositTransaction(param ListDepositTransactionParam) ([]ListDepositTransactionReturn, *go_error.ErrorInfo) {
 	path := `/api/storm/v1/deposit/transactions`
-	data, err := this.getJson(path, param)
+	data, err := r.getJson(path, param)
 	if err != nil {
 		return nil, err
 	}
