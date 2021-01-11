@@ -79,7 +79,7 @@ type ApiResult struct {
 func (r *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := r.signatureManager.SignRequest(`POST`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithIsDebug(r.isDebug)).Post(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout)).Post(go_http.RequestParam{
 		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
@@ -109,7 +109,7 @@ func (r *Remote) postJson(path string, params interface{}) (interface{}, *go_err
 func (r *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := r.signatureManager.SignRequest(`GET`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithIsDebug(r.isDebug)).Get(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout)).Get(go_http.RequestParam{
 		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
