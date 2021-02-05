@@ -6,6 +6,7 @@ import (
 	"github.com/pefish/go-format"
 	"github.com/pefish/go-http"
 	"github.com/pefish/go-json"
+	go_logger "github.com/pefish/go-logger"
 	"github.com/pefish/go-reflect"
 	signature2 "github.com/pefish/storm-golang-sdk/signature"
 	"net/http"
@@ -18,7 +19,8 @@ type Remote struct {
 	baseUrl          string
 	signatureManager *signature2.SignatureClass
 	timeout          time.Duration
-	isDebug          bool
+
+	logger go_logger.InterfaceLogger
 }
 
 type RemoteOption struct {
@@ -26,7 +28,7 @@ type RemoteOption struct {
 	reqPubKey  string
 	reqPrivKey string
 	resPubKey  string
-	isDebug    bool
+	logger go_logger.InterfaceLogger
 }
 
 func WithTimeout(timeout time.Duration) RemoteOptionFunc {
@@ -35,9 +37,9 @@ func WithTimeout(timeout time.Duration) RemoteOptionFunc {
 	}
 }
 
-func WithIsDebug(isDebug bool) RemoteOptionFunc {
+func WithLogger(logger go_logger.InterfaceLogger) RemoteOptionFunc {
 	return func(option *RemoteOption) {
-		option.isDebug = isDebug
+		option.logger = logger
 	}
 }
 
@@ -52,7 +54,6 @@ func WithKey(reqPubKey string, reqPrivKey string, resPubKey string) RemoteOption
 func NewRemote(baseUrl string, opts ...RemoteOptionFunc) *Remote {
 	option := RemoteOption{
 		timeout: 10 * time.Second,
-		isDebug: false,
 	}
 	for _, o := range opts {
 		o(&option)
@@ -65,7 +66,7 @@ func NewRemote(baseUrl string, opts ...RemoteOptionFunc) *Remote {
 			ResPubKey:  option.resPubKey,
 		},
 		timeout: option.timeout,
-		isDebug: option.isDebug,
+		logger: option.logger,
 	}
 }
 
@@ -79,7 +80,7 @@ type ApiResult struct {
 func (r *Remote) postJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := r.signatureManager.SignRequest(`POST`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout)).Post(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithLogger(r.logger)).Post(go_http.RequestParam{
 		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
@@ -109,7 +110,7 @@ func (r *Remote) postJson(path string, params interface{}) (interface{}, *go_err
 func (r *Remote) getJson(path string, params interface{}) (interface{}, *go_error.ErrorInfo) {
 	result := ApiResult{}
 	sig, timestamp := r.signatureManager.SignRequest(`GET`, path, go_format.Format.StructToMap(params))
-	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout)).Get(go_http.RequestParam{
+	resp, body, err := go_http.NewHttpRequester(go_http.WithTimeout(r.timeout), go_http.WithLogger(r.logger)).Get(go_http.RequestParam{
 		Url: r.baseUrl + path,
 		Headers: map[string]interface{}{
 			`STM-REQ-KEY`:       r.signatureManager.ReqPubKey,
